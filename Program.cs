@@ -51,6 +51,13 @@ namespace Dithery_cli
 			_ => throw new ArgumentException(message: "invalid dithering", paramName: method.ToString()),
 		};
 
+		private static Func<object[],object[]> GetColorReductionMethod(ColorReductionMethod method) =>
+		method switch
+		{
+			ColorReductionMethod.TrueColorToWebSafe => ColorReductions.TrueColorBytesToWebSafeColorBytes,
+			_ => throw new ArgumentException(message: "invalid color reduction", paramName: method.ToString()),
+		};
+
 		private static readonly Dictionary<DitheringMethod, string> ditheringDescriptions = new Dictionary<DitheringMethod, string>()
 		{
 			{ DitheringMethod.All, "Apply all dithering methods to create multiple files" },
@@ -95,17 +102,6 @@ namespace Dithery_cli
 			Console.WriteLine("Please use --help");
 		}
 
-		private static object[] TrueColorBytesToWebSafeColorBytes(object[] input)
-		{
-			object[] returnArray = new object[input.Length];
-			for (int i = 0; i < returnArray.Length; i++)
-			{
-				returnArray[i] = (byte)(Math.Round((byte)input[i] / 51.0) * 51);
-			}
-			
-			return returnArray;
-		}
-
 		static void Main(string[] args)
 		{
 			Console.WriteLine("dithery-cli");
@@ -122,6 +118,8 @@ namespace Dithery_cli
 				InvalidParametersComplain(possibleError);
 				return;
 			}
+
+			var colorReductionMethod = GetColorReductionMethod(colorReduction);
 
 			if (dithering == DitheringMethod.All)
 			{
@@ -150,7 +148,7 @@ namespace Dithery_cli
 						
 						foreach (DitheringMethod ditheringMethod in valuesAsList)
 						{
-							DitheringBase ditherer = GetDitherer(ditheringMethod, TrueColorBytesToWebSafeColorBytes);
+							DitheringBase ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
 							MemoryStream ditheredImageMemoryStream = new MemoryStream();
 							StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer, writeToSameBitmap: false);
 							images.Add((ditheredImageMemoryStream, ditherer.GetMethodName()));
@@ -162,7 +160,7 @@ namespace Dithery_cli
 			}
 			else
 			{
-				DitheringBase ditherer = GetDitherer(dithering, TrueColorBytesToWebSafeColorBytes);
+				DitheringBase ditherer = GetDitherer(dithering, colorReductionMethod);
 				using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
 				using(var image = new Bitmap(bitmapStream))
 				{
