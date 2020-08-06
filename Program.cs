@@ -50,12 +50,40 @@ namespace Dithery_cli
 			_ => throw new ArgumentException(message: "invalid dithering", paramName: method.ToString()),
 		};
 
+		private static readonly Dictionary<DitheringMethod, string> ditheringDescriptions = new Dictionary<DitheringMethod, string>()
+		{
+			{ DitheringMethod.All, "Apply all dithering methods to create multiple files" },
+			{ DitheringMethod.Atkinson, "Atkinson dithering" },
+			{ DitheringMethod.Burkes, "Burkes dithering" },
+			{ DitheringMethod.Fake, "Fake means no dithering (but color reduction is still done)" },
+			{ DitheringMethod.FloydSteinberg, "Floyd-Steinberg dithering" },
+			{ DitheringMethod.JarvisJudiceNinke, "Jarvis-Judice-Ninke dithering" },
+			{ DitheringMethod.Sierra, "Sierra dithering" },
+			{ DitheringMethod.SierraLite, "Sierra lite dithering" },
+			{ DitheringMethod.SierraTwoRow, "Sierra two row dithering" },
+			{ DitheringMethod.Stucki, "Stucki dithering" },
+		};
+
 		private static void PrintHelp()
 		{
+			var ditheringMethodAsArray = Enum.GetValues(typeof(DitheringMethod));		
+			Console.WriteLine("");
 			Console.WriteLine("Dithery-cli is a command-line image dithering tool");
-			Console.WriteLine("Help:");
-			Console.WriteLine(" Usage: dithery imagefile -m dithering_method -c color_reduction_method -f format -o outputfile");
+			Console.WriteLine("");
+			Console.WriteLine("-- Help --");
+			Console.WriteLine(" Usage:");
+			Console.WriteLine(" dithery imagefile -m dithering_method -c color_reduction_method -f format -o outputfile");
+			Console.WriteLine("");
 			Console.WriteLine(" Dithering methods (for output):");
+			foreach (DitheringMethod method in ditheringMethodAsArray)
+			{
+				if (method == DitheringMethod.None)
+				{
+					continue;
+				}
+				Console.WriteLine($"  {method} - {ditheringDescriptions[method]}");
+			}
+			Console.WriteLine("");
 			Console.WriteLine(" Format (for output):");
 			Console.WriteLine("  html for HTML file output");
 		}
