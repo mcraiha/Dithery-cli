@@ -24,7 +24,8 @@ namespace Dithery_cli
 	public enum ColorReductionMethod
 	{
 		None,
-		TrueColorToWebSafe
+		TrueColorToWebSafe,
+		TrueColorToFullCGA
 	}
 
 	public enum OutputFormat
@@ -55,6 +56,7 @@ namespace Dithery_cli
 		method switch
 		{
 			ColorReductionMethod.TrueColorToWebSafe => ColorReductions.TrueColorBytesToWebSafeColorBytes,
+			ColorReductionMethod.TrueColorToFullCGA => ColorReductions.TrueColorBytesToCGABytes,
 			_ => throw new ArgumentException(message: "invalid color reduction", paramName: method.ToString()),
 		};
 
