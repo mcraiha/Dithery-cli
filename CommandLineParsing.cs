@@ -72,6 +72,11 @@ namespace Dithery_cli
 			{
 				return (false, $"Cannot parse dithering method from {ditheringMethodString} !", DitheringMethod.None, ColorReductionMethod.None, OutputFormat.None, "", "");
 		 	}
+
+			if (ditheringMethod == DitheringMethod.None)
+			{
+				return (false, $"Cannot use None as dithering!", DitheringMethod.None, ColorReductionMethod.None, OutputFormat.None, "", "");
+			}
 			
 			ColorReductionMethod colorReductionMethod = ColorReductionMethod.None;
 			string colorReductionMethodString = args[colorReductionMethodValueIndex];
@@ -87,6 +92,11 @@ namespace Dithery_cli
 			{
             	return (false, $"Cannot parse color reduction method from {colorReductionMethodString} !", DitheringMethod.None, ColorReductionMethod.None, OutputFormat.None, "", "");
          	}
+
+			if (colorReductionMethod == ColorReductionMethod.None)
+			{
+				return (false, $"Cannot use None as color reduce method!", DitheringMethod.None, ColorReductionMethod.None, OutputFormat.None, "", "");
+			}
 
 			OutputFormat outputFormat = OutputFormat.None;
 			string outputFormatString = args[formatValueIndex];
