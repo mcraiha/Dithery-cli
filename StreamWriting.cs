@@ -17,6 +17,12 @@ namespace Dithery_cli
 				ReadWriteBitmaps.WriteToBitmap(bitmap, temp.GetPixelChannels);
 				bitmap.Save(outputStream, System.Drawing.Imaging.ImageFormat.Png);
 			}
+			else
+			{
+				Bitmap tempBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.PixelFormat);
+				ReadWriteBitmaps.WriteToBitmap(tempBitmap, temp.GetPixelChannels);
+				tempBitmap.Save(outputStream, System.Drawing.Imaging.ImageFormat.Png);
+			}
 		}
 	}
 }

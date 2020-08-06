@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Dithery_cli
 {
@@ -124,7 +125,40 @@ namespace Dithery_cli
 
 			if (dithering == DitheringMethod.All)
 			{
+				var valuesAsList = new List<DitheringMethod>(Enum.GetValues(typeof(DitheringMethod)).Cast<DitheringMethod>());
+				valuesAsList.Remove(DitheringMethod.All);
+				valuesAsList.Remove(DitheringMethod.None);
 
+				using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
+				using(var image = new Bitmap(bitmapStream))
+				{
+					if (outputFormat == OutputFormat.SingleImage)
+					{
+						// TODO: this
+						foreach (DitheringMethod ditheringMethod in valuesAsList)
+						{
+
+						}
+					}
+					else if (outputFormat == OutputFormat.HTMLBasic)
+					{
+						List<(MemoryStream pngData, string text)> images = new List<(MemoryStream pngData, string text)>();
+
+						MemoryStream originalImageMemoryStream = new MemoryStream();
+						image.Save(originalImageMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
+						images.Add((originalImageMemoryStream, "Original"));
+						
+						foreach (DitheringMethod ditheringMethod in valuesAsList)
+						{
+							DitheringBase ditherer = GetDitherer(ditheringMethod, TrueColorBytesToWebSafeColorBytes);
+							MemoryStream ditheredImageMemoryStream = new MemoryStream();
+							StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer, writeToSameBitmap: false);
+							images.Add((ditheredImageMemoryStream, ditherer.GetMethodName()));
+						}
+
+						File.WriteAllText(outputFile, HtmlWriter.GenerateMultiImageHtml(images.ToArray()));
+					}
+				}
 			}
 			else
 			{
