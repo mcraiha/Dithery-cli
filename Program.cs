@@ -105,35 +105,6 @@ namespace Dithery_cli
 			return returnArray;
 		}
 
-		private static byte[,,] ReadBitmapToColorBytes(Bitmap bitmap)
-		{
-			byte[,,] returnValue = new byte[bitmap.Width, bitmap.Height, 3];
-			for (int x = 0; x < bitmap.Width; x++)
-			{
-				for (int y = 0; y < bitmap.Height; y++)
-				{
-					Color color = bitmap.GetPixel(x, y);
-					returnValue[x, y, 0] = color.R;
-					returnValue[x, y, 1] = color.G;
-					returnValue[x, y, 2] = color.B;
-				}
-			}
-			return returnValue;
-		}
-
-		private static void WriteToBitmap(Bitmap bitmap, Func<int, int, object[]> reader)
-		{
-			for (int x = 0; x < bitmap.Width; x++)
-			{
-				for (int y = 0; y < bitmap.Height; y++)
-				{
-					object[] read = reader(x, y);
-					Color color = Color.FromArgb((byte)read[0], (byte)read[1], (byte)read[2]);
-					bitmap.SetPixel(x, y, color);
-				}
-			}
-		}
-
 		static void Main(string[] args)
 		{
 			Console.WriteLine("dithery-cli");
@@ -151,34 +122,30 @@ namespace Dithery_cli
 				return;
 			}
 
-			DitheringBase ditherer = GetDitherer(dithering, TrueColorBytesToWebSafeColorBytes);
-			using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
-			using(var image = new Bitmap(bitmapStream))
+			if (dithering == DitheringMethod.All)
 			{
-				byte[,,] bytes = ReadBitmapToColorBytes(image);
 
-				TempByteImageFormat temp = new TempByteImageFormat(bytes);
-				temp = (TempByteImageFormat)ditherer.DoDithering(temp);
-
-				if (outputFormat == OutputFormat.SingleImage)
+			}
+			else
+			{
+				DitheringBase ditherer = GetDitherer(dithering, TrueColorBytesToWebSafeColorBytes);
+				using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
+				using(var image = new Bitmap(bitmapStream))
 				{
-					// Use same bitmap for writing since we only save one image
-					WriteToBitmap(image, temp.GetPixelChannels);
+					if (outputFormat == OutputFormat.SingleImage)
+					{
+						FileWriting.DitherAndWritePngFile(outputFile, image, ditherer);
+					}
+					else if (outputFormat == OutputFormat.HTMLBasic)
+					{
+						MemoryStream originalImageMemoryStream = new MemoryStream();
+						image.Save(originalImageMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
 
-					image.Save(outputFile);
-				}
-				else if (outputFormat == OutputFormat.HTMLBasic)
-				{
-					MemoryStream originalImageMemoryStream = new MemoryStream();
-					MemoryStream ditheredImageMemoryStream = new MemoryStream();
+						MemoryStream ditheredImageMemoryStream = new MemoryStream();
+						StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer);
 
-					image.Save(originalImageMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
-
-					WriteToBitmap(image, temp.GetPixelChannels);
-
-					image.Save(ditheredImageMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
-
-					File.WriteAllText(outputFile, HtmlWriter.GenerateSingleImageHtml((originalImageMemoryStream, "Original"), (ditheredImageMemoryStream, ditherer.GetMethodName())));
+						File.WriteAllText(outputFile, HtmlWriter.GenerateSingleImageHtml((originalImageMemoryStream, "Original"), (ditheredImageMemoryStream, ditherer.GetMethodName())));
+					}
 				}
 			}
 		}
