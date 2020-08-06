@@ -132,9 +132,26 @@ namespace Dithery_cli
 				TempByteImageFormat temp = new TempByteImageFormat(bytes);
 				temp = (TempByteImageFormat)ditherer.DoDithering(temp);
 
-				WriteToBitmap(image, temp.GetPixelChannels);
+				if (outputFormat == OutputFormat.SingleImage)
+				{
+					// Use same bitmap for writing since we only save one image
+					WriteToBitmap(image, temp.GetPixelChannels);
 
-				image.Save(outputFile);
+					image.Save(outputFile);
+				}
+				else if (outputFormat == OutputFormat.HTMLBasic)
+				{
+					MemoryStream originalImageMemoryStream = new MemoryStream();
+					MemoryStream ditheredImageMemoryStream = new MemoryStream();
+
+					image.Save(originalImageMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+					WriteToBitmap(image, temp.GetPixelChannels);
+
+					image.Save(ditheredImageMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
+
+					File.WriteAllText(outputFile, HtmlWriter.GenerateSingleImageHtml((originalImageMemoryStream, "Original"), (ditheredImageMemoryStream, ditherer.GetMethodName())));
+				}
 			}
 		}
 	}
