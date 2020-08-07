@@ -14,6 +14,9 @@ Save single Stucki dithered image, with true colors to web safe color reduction 
 Save all ditherings to HTML file, with true colors to web safe color reduction for PNG file 
 `dotnet run -- half.png -m All -c TrueColorToWebSafe -f HTMLBasic -o dither.html`
 
+Save all ditherings to separate .png files, with true colors to web safe color reduction for PNG file 
+`dotnet run -- half.png -m all -c TrueColorToWebSafe -f SingleImage -o dither.png`
+
 ## How to install
 Easiest option is ...
 

@@ -164,10 +164,16 @@ namespace Dithery_cli
 				{
 					if (outputFormat == OutputFormat.SingleImage)
 					{
-						// TODO: this
 						foreach (DitheringMethod ditheringMethod in valuesAsList)
 						{
-
+							DitheringBase ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
+							string modifiedOutputFile = outputFile.Replace(".png", $"{ditherer.GetFilenameAddition()}.png");
+							if (File.Exists(modifiedOutputFile))
+							{
+								Console.WriteLine($"Cannot overwrite existing file {modifiedOutputFile}");
+								return;
+							}
+							FileWriting.DitherAndWritePngFile(modifiedOutputFile, image, ditherer, writeToSameBitmap: false);
 						}
 					}
 					else if (outputFormat == OutputFormat.HTMLBasic)
