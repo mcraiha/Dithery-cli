@@ -16,6 +16,17 @@ namespace Dithery_cli
 			return returnArray;
 		}
 
+		public static object[] TrueColorBytesToEGABytes(object[] input)
+		{
+			object[] returnArray = new object[input.Length];
+			for (int i = 0; i < returnArray.Length; i++)
+			{
+				returnArray[i] = (byte)(Math.Round((byte)input[i] / 85.0) * 85);
+			}
+			
+			return returnArray;
+		}
+
 		private static readonly List<byte[]> fullCGAColors = new List<byte[]>() 
 		{
 			new byte[] { 0x00, 0x00, 0x00 }, // black

@@ -25,7 +25,8 @@ namespace Dithery_cli
 	{
 		None,
 		TrueColorToWebSafe,
-		TrueColorToFullCGA
+		TrueColorToFullCGA,
+		TrueColorToFullEGA
 	}
 
 	public enum OutputFormat
@@ -66,6 +67,7 @@ namespace Dithery_cli
 		{
 			ColorReductionMethod.TrueColorToWebSafe => ColorReductions.TrueColorBytesToWebSafeColorBytes,
 			ColorReductionMethod.TrueColorToFullCGA => ColorReductions.TrueColorBytesToCGABytes,
+			ColorReductionMethod.TrueColorToFullEGA => ColorReductions.TrueColorBytesToEGABytes,
 			_ => throw new ArgumentException(message: "invalid color reduction", paramName: method.ToString()),
 		};
 
@@ -87,6 +89,7 @@ namespace Dithery_cli
 		{
 			{ ColorReductionMethod.TrueColorToWebSafe, "True colors to Web safe colors (216 different colors)" },
 			{ ColorReductionMethod.TrueColorToFullCGA, "True colors to full palette CGA colors (16 different colors)" },
+			{ ColorReductionMethod.TrueColorToFullEGA, "True colors to full palette EGA colors (64 different colors)" },
 		};
 
 		private static void PrintHelp()
