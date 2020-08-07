@@ -8,6 +8,12 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>dithery</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
+
+    <Authors>Kaarlo Räihä</Authors>
+    <Description>Dithery-cli is command-line image dithering tool</Description>
+
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup>

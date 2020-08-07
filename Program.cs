@@ -35,6 +35,15 @@ namespace Dithery_cli
 		HTMLBasic,
 	}
 
+	public class VersionInfos
+	{
+		public string GetAssemblyVersion()
+		{
+			string returnValue = GetType().Assembly.GetName().Version.ToString();
+			return returnValue.Remove(returnValue.Length - 2);
+		}
+	}
+
 	class Program
 	{
 		private static DitheringBase GetDitherer(DitheringMethod method, Func<object[],object[]> colorfunc) => 
@@ -124,7 +133,7 @@ namespace Dithery_cli
 
 		static void Main(string[] args)
 		{
-			Console.WriteLine("dithery-cli");
+			Console.WriteLine($"dithery-cli v{new VersionInfos().GetAssemblyVersion()}");
 			if (args.Length == 0 || args[0] == "--help" || args[0] == "-h")
 			{
 				PrintHelp();
