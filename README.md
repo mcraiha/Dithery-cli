@@ -1,6 +1,9 @@
 # Dithery-cli
  Command-line image dithering tool
 
+## Build status
+![](https://github.com/mcraiha/Dithery-cli/workflows/.NET%20Core/badge.svg)
+
 ## Sample command
 Save single Atkinson dithered image, with true colors to web safe color reduction to PNG file 
 `dotnet run -- half.png -m atkinson -c TrueColorToWebSafe -f SingleImage -o dither.png`
