@@ -11,7 +11,7 @@ Save single Atkinson dithered image, with true colors to web safe color reductio
 Save single Stucki dithered image, with true colors to web safe color reduction to HTML file (includes both original and dithered images in one HTML file) 
 `dotnet run -- half.png -m stucki -c TrueColorToWebSafe -f HTMLBasic -o dither.html`
 
-Save all ditherings to HTML file, with true colors to web safe color reduction to PNG file 
+Save all ditherings to HTML file, with true colors to web safe color reduction for PNG file 
 `dotnet run -- half.png -m All -c TrueColorToWebSafe -f HTMLBasic -o dither.html`
 
 ## How to install
@@ -22,6 +22,12 @@ Easiest option is ...
 
 ## How to package
 `dotnet pack`
+
+## Input files
+In theory System.Drawing.Bitmap should support BMP, GIF, EXIF, JPG, PNG and TIFF file formats. I have only tested it with PNG files.
+
+## Output files
+Output can be either PNG file(s) or HTML file with embedded PNG images. 
 
 ## License
 Text in this document and source code files are released into the public domain. See [LICENSE](https://github.com/mcraiha/Dithery-cli/blob/master/LICENSE) file.
