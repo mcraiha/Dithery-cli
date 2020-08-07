@@ -74,9 +74,16 @@ namespace Dithery_cli
 			{ DitheringMethod.Stucki, "Stucki dithering" },
 		};
 
+		private static readonly Dictionary<ColorReductionMethod, string> colorReductionDescriptions = new Dictionary<ColorReductionMethod, string>()
+		{
+			{ ColorReductionMethod.TrueColorToWebSafe, "True colors to Web safe colors (216 different colors)" },
+			{ ColorReductionMethod.TrueColorToFullCGA, "True colors to full palette CGA colors (16 different colors)" },
+		};
+
 		private static void PrintHelp()
 		{
-			var ditheringMethodAsArray = Enum.GetValues(typeof(DitheringMethod));		
+			var ditheringMethodAsArray = Enum.GetValues(typeof(DitheringMethod));
+			var colorReductionMethodAsArray = Enum.GetValues(typeof(ColorReductionMethod));	
 			Console.WriteLine("");
 			Console.WriteLine("Dithery-cli is a command-line image dithering tool");
 			Console.WriteLine("");
@@ -93,6 +100,17 @@ namespace Dithery_cli
 				}
 				Console.WriteLine($"  {method} - {ditheringDescriptions[method]}");
 			}
+			Console.WriteLine("");
+			Console.WriteLine(" Color reduction methods (for output):");
+			foreach (ColorReductionMethod method in colorReductionMethodAsArray)
+			{
+				if (method == ColorReductionMethod.None)
+				{
+					continue;
+				}
+				Console.WriteLine($"  {method} - {colorReductionDescriptions[method]}");
+			}
+
 			Console.WriteLine("");
 			Console.WriteLine(" Format (for output):");
 			Console.WriteLine("  html for HTML file output");
