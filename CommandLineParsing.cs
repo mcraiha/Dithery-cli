@@ -119,6 +119,21 @@ namespace Dithery_cli
 				return (false, $"Cannot overwrite existing file {outputFileName} !", DitheringMethod.None, ColorReductionMethod.None, OutputFormat.None, "", "");
 			}
 
+			if (outputFormat == OutputFormat.HTMLBasic)
+			{
+				if (!outputFileName.EndsWith(".html") && !outputFileName.EndsWith(".htm"))
+				{
+					return (false, $"HTML output must use .html or .htm file extension!", DitheringMethod.None, ColorReductionMethod.None, OutputFormat.None, "", "");
+				}
+			}
+			else if (outputFormat == OutputFormat.SingleImage)
+			{
+				if (!outputFileName.EndsWith(".png"))
+				{
+					return (false, $"Image output must use .png file extension!", DitheringMethod.None, ColorReductionMethod.None, OutputFormat.None, "", "");
+				}
+			}
+
 			return (true, "", ditheringMethod, colorReductionMethod, outputFormat, input, outputFileName);
 		}
 
