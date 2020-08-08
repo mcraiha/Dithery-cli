@@ -19,7 +19,7 @@ Save all ditherings to separate .png files, with true colors to web safe color r
 
 ## How to install
 Easiest option is to use dotnet global install  
-`dotnet tool install -g Dithery-cli`
+`dotnet tool install -g Dithery-cli`  
 and after that you can run Dithery-cli from any location with `dithery`
 
 ## How to build
