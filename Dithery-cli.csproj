@@ -12,6 +12,7 @@
     <Authors>Kaarlo Räihä</Authors>
     <Description>Dithery-cli is command-line image dithering tool</Description>
     <PackageProjectUrl>https://github.com/mcraiha/Dithery-cli</PackageProjectUrl>
+    <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
 
     <VersionPrefix>1.0.0</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
