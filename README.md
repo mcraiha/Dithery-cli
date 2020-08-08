@@ -18,7 +18,9 @@ Save all ditherings to separate .png files, with true colors to web safe color r
 `dotnet run -- half.png -m all -c TrueColorToWebSafe -f SingleImage -o dither.png`
 
 ## How to install
-Easiest option is ...
+Easiest option is to use dotnet global install  
+`dotnet tool install -g Dithery-cli`
+and after that you can run Dithery-cli from any location with `dithery`
 
 ## How to build
 `dotnet build`
