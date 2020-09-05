@@ -5,7 +5,7 @@ namespace Dithery_cli
 {
 	public static class StreamWriting
 	{
-		public static void DitherAndWritePngStream(Stream outputStream, Bitmap bitmap, DitheringBase ditherer, bool writeToSameBitmap = true)
+		public static void DitherAndWritePngStream(Stream outputStream, Bitmap bitmap, DitheringBase<byte> ditherer, bool writeToSameBitmap = true)
 		{
 			byte[,,] bytes = ReadWriteBitmaps.ReadBitmapToColorBytes(bitmap);
 

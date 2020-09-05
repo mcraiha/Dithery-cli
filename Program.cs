@@ -47,7 +47,7 @@ namespace Dithery_cli
 
 	class Program
 	{
-		private static DitheringBase GetDitherer(DitheringMethod method, Func<object[],object[]> colorfunc) => 
+		private static DitheringBase<byte> GetDitherer(DitheringMethod method, DitheringBase<byte>.ColorFunction colorfunc) => 
 		method switch
 		{
 			DitheringMethod.Atkinson => new AtkinsonDitheringRGBByte(colorfunc),
@@ -62,7 +62,7 @@ namespace Dithery_cli
 			_ => throw new ArgumentException(message: "invalid dithering", paramName: method.ToString()),
 		};
 
-		private static Func<object[],object[]> GetColorReductionMethod(ColorReductionMethod method) =>
+		private static DitheringBase<byte>.ColorFunction GetColorReductionMethod(ColorReductionMethod method) =>
 		method switch
 		{
 			ColorReductionMethod.TrueColorToWebSafe => ColorReductions.TrueColorBytesToWebSafeColorBytes,
@@ -166,7 +166,7 @@ namespace Dithery_cli
 					{
 						foreach (DitheringMethod ditheringMethod in valuesAsList)
 						{
-							DitheringBase ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
+							DitheringBase<byte> ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
 							string modifiedOutputFile = outputFile.Replace(".png", $"{ditherer.GetFilenameAddition()}.png");
 							if (File.Exists(modifiedOutputFile))
 							{
@@ -186,7 +186,7 @@ namespace Dithery_cli
 						
 						foreach (DitheringMethod ditheringMethod in valuesAsList)
 						{
-							DitheringBase ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
+							DitheringBase<byte> ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
 							MemoryStream ditheredImageMemoryStream = new MemoryStream();
 							StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer, writeToSameBitmap: false);
 							images.Add((ditheredImageMemoryStream, ditherer.GetMethodName()));
@@ -198,7 +198,7 @@ namespace Dithery_cli
 			}
 			else
 			{
-				DitheringBase ditherer = GetDitherer(dithering, colorReductionMethod);
+				DitheringBase<byte> ditherer = GetDitherer(dithering, colorReductionMethod);
 				using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
 				using(var image = new Bitmap(bitmapStream))
 				{

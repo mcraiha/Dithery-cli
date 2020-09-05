@@ -5,26 +5,20 @@ namespace Dithery_cli
 {
 	public static class ColorReductions
 	{
-		public static object[] TrueColorBytesToWebSafeColorBytes(object[] input)
+		public static void TrueColorBytesToWebSafeColorBytes(in byte[] input, ref byte[] output)
 		{
-			object[] returnArray = new object[input.Length];
-			for (int i = 0; i < returnArray.Length; i++)
+			for (int i = 0; i < input.Length; i++)
 			{
-				returnArray[i] = (byte)(Math.Round((byte)input[i] / 51.0) * 51);
+				output[i] = (byte)(Math.Round(input[i] / 51.0) * 51);
 			}
-			
-			return returnArray;
 		}
 
-		public static object[] TrueColorBytesToEGABytes(object[] input)
+		public static void TrueColorBytesToEGABytes(in byte[] input, ref byte[] output)
 		{
-			object[] returnArray = new object[input.Length];
-			for (int i = 0; i < returnArray.Length; i++)
+			for (int i = 0; i < input.Length; i++)
 			{
-				returnArray[i] = (byte)(Math.Round((byte)input[i] / 85.0) * 85);
+				output[i] = (byte)(Math.Round((byte)input[i] / 85.0) * 85);
 			}
-			
-			return returnArray;
 		}
 
 		private static readonly List<byte[]> fullCGAColors = new List<byte[]>() 
@@ -47,23 +41,9 @@ namespace Dithery_cli
 			new byte[] { 0xFF, 0xFF, 0xFF }, // white
 		};
 
-		public static object[] TrueColorBytesToCGABytes(object[] input)
+		public static void TrueColorBytesToCGABytes(in byte[] input, ref byte[] output)
 		{
-			object[] returnArray = new object[input.Length];
-			byte[] tempColor = new byte[input.Length];
-			for (int i = 0; i < tempColor.Length; i++)
-			{
-				tempColor[i] = (byte)input[i];
-			}
-
-			tempColor = FindNearestColor(tempColor, fullCGAColors);
-
-			for (int i = 0; i < returnArray.Length; i++)
-			{
-				returnArray[i] = tempColor[i];
-			}
-			
-			return returnArray;
+			output = FindNearestColor(input, fullCGAColors);
 		}
 
 		private static byte[] FindNearestColor(byte[] actualColor, List<byte[]> allowedColors)

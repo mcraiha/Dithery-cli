@@ -6,13 +6,13 @@ namespace Dithery_cli
 {
 	public static class ReadWriteBitmaps
 	{
-		public static void WriteToBitmap(Bitmap bitmap, Func<int, int, object[]> reader)
+		public static void WriteToBitmap(Bitmap bitmap, Func<int, int, byte[]> reader)
 		{
 			for (int x = 0; x < bitmap.Width; x++)
 			{
 				for (int y = 0; y < bitmap.Height; y++)
 				{
-					object[] read = reader(x, y);
+					byte[] read = reader(x, y);
 					Color color = Color.FromArgb((byte)read[0], (byte)read[1], (byte)read[2]);
 					bitmap.SetPixel(x, y, color);
 				}
