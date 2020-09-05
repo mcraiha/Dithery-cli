@@ -7,15 +7,23 @@
 ## Sample commands
 Save single Atkinson dithered image, with true colors to web safe color reduction to PNG file  
 `dotnet run -- half.png -m atkinson -c TrueColorToWebSafe -f SingleImage -o dither.png`
+or
+`dithery half.png -m atkinson -c TrueColorToWebSafe -f SingleImage -o dither.png`
 
 Save single Stucki dithered image, with true colors to web safe color reduction to HTML file (includes both original and dithered images in one HTML file)  
 `dotnet run -- half.png -m stucki -c TrueColorToWebSafe -f HTMLBasic -o dither.html`
+or
+`dithery half.png -m stucki -c TrueColorToWebSafe -f HTMLBasic -o dither.html`
 
 Save all ditherings to HTML file, with true colors to web safe color reduction for PNG file  
 `dotnet run -- half.png -m All -c TrueColorToWebSafe -f HTMLBasic -o dither.html`
+or
+`dithery half.png -m All -c TrueColorToWebSafe -f HTMLBasic -o dither.html`
 
 Save all ditherings to separate .png files, with true colors to web safe color reduction for PNG file  
 `dotnet run -- half.png -m all -c TrueColorToWebSafe -f SingleImage -o dither.png`
+or
+`dithery half.png -m all -c TrueColorToWebSafe -f SingleImage -o dither.png`
 
 ## How to install
 Easiest option is to use dotnet global install  
