@@ -1,5 +1,5 @@
 # Dithery-cli
- Command-line image dithering tool written in C#. Dithering part is done with [CSharp-Dithering](https://github.com/mcraiha/CSharp-Dithering)
+ Command-line [image dithering](https://en.wikipedia.org/wiki/Dither#Digital_photography_and_image_processing) tool written in C#. Dithering part is done with [CSharp-Dithering](https://github.com/mcraiha/CSharp-Dithering)
 
 ## Build status
 ![](https://github.com/mcraiha/Dithery-cli/workflows/.NET%20Core/badge.svg)
