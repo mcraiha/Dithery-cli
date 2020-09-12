@@ -19,19 +19,25 @@ namespace Dithery_cli
 			}
 		}
 
-		public static byte[,,] ReadBitmapToColorBytes(Bitmap bitmap)
+		public static byte[] ReadBitmapToColorBytes(Bitmap bitmap)
 		{
-			byte[,,] returnValue = new byte[bitmap.Width, bitmap.Height, 3];
-			for (int x = 0; x < bitmap.Width; x++)
+			int width = bitmap.Width;
+			int height = bitmap.Height;
+			int channelsPerPixel = 3;
+			byte[] returnValue = new byte[width * height * channelsPerPixel];
+			
+			for (int y = 0; y < bitmap.Height; y++)
 			{
-				for (int y = 0; y < bitmap.Height; y++)
+				for (int x = 0; x < bitmap.Width; x++)
 				{
 					Color color = bitmap.GetPixel(x, y);
-					returnValue[x, y, 0] = color.R;
-					returnValue[x, y, 1] = color.G;
-					returnValue[x, y, 2] = color.B;
+					int arrayIndex = y * width * channelsPerPixel + x * channelsPerPixel;
+					returnValue[arrayIndex + 0] = color.R;
+					returnValue[arrayIndex + 1] = color.G;
+					returnValue[arrayIndex + 2] = color.B;
 				}
 			}
+			
 			return returnValue;
 		}
 	}
