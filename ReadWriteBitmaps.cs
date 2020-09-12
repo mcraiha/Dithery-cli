@@ -8,9 +8,9 @@ namespace Dithery_cli
 	{
 		public static void WriteToBitmap(Bitmap bitmap, Func<int, int, byte[]> reader)
 		{
-			for (int x = 0; x < bitmap.Width; x++)
+			for (int y = 0; y < bitmap.Height; y++)
 			{
-				for (int y = 0; y < bitmap.Height; y++)
+				for (int x = 0; x < bitmap.Width; x++)
 				{
 					byte[] read = reader(x, y);
 					Color color = Color.FromArgb((byte)read[0], (byte)read[1], (byte)read[2]);
