@@ -1,0 +1,35 @@
+name: Build-Win-Release
+
+on:
+  push:
+     tags:
+      - v1.*           # Push events to v1.0, v1.1, and v1.9 tags
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build a release
+      run: dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true --self-contained true -o publish
+    - name: Rename and move binary
+      run: mv publish/Dithery-cli.exe dithery.exe
+    - name: Install zip
+      run: sudo apt install zip
+    - name: Package
+      run: zip -9 release.zip dithery.exe
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        files: |
+          release.zip
+            
