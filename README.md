@@ -30,6 +30,8 @@ Easiest option is to use dotnet global install
 `dotnet tool install -g Dithery-cli`  
 and after that you can run Dithery-cli from any location with `dithery`
 
+You can also download Windows release (an .exe file) from [Releases](https://github.com/mcraiha/Dithery-cli/releases) page
+
 ## How to build
 `dotnet build`
 
