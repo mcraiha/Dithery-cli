@@ -1,3 +1,7 @@
+## Version 1.0.3 (released 2021-10-31)
+- Update System.Drawing.Common
+- Nuget release also for .NET 5
+
 ## Version 1.0.2 (released 2020-09-12)
 - Support LibDithering 0.9.2 (a bit faster)
 - Use 1d byte array for faster processing
