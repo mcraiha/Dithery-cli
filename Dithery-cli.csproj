@@ -14,12 +14,12 @@
     <PackageProjectUrl>https://github.com/mcraiha/Dithery-cli</PackageProjectUrl>
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
 
-    <VersionPrefix>1.0.2</VersionPrefix>
+    <VersionPrefix>1.0.3</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="LibDithering" Version="0.9.2" />
   </ItemGroup>
 
