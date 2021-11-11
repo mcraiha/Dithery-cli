@@ -1,3 +1,6 @@
+## Version 1.0.4 (released 2021-11-11)
+- Nuget release also for .NET 6
+
 ## Version 1.0.3 (released 2021-10-31)
 - Update System.Drawing.Common
 - Nuget release also for .NET 5
