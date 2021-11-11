@@ -15,21 +15,21 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build a release
-      run: dotnet publish -c Release -f net5.0 -r win-x64 -p:PublishSingleFile=true --self-contained true -o publish
+      run: dotnet publish -c Release -f net6.0 -r win-x64 -p:PublishSingleFile=true --self-contained true -o publish
     - name: Rename and move binary
       run: mv publish/Dithery-cli.exe dithery.exe
     - name: Install zip
       run: sudo apt install zip
     - name: Package
-      run: zip -9 release.zip dithery.exe
+      run: zip -9 release_${{ env.GITHUB_REF_NAME }}-win_x64.zip dithery.exe
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
         files: |
-          release.zip
+          release_${{ env.GITHUB_REF_NAME }}-win_x64.zip
             
