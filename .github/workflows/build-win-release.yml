@@ -25,11 +25,11 @@ jobs:
     - name: Install zip
       run: sudo apt install zip
     - name: Package
-      run: zip -9 release_${{ env.GITHUB_REF_NAME }}-win_x64.zip dithery.exe
+      run: zip -9 release_${{ github.ref_name }}-win_x64.zip dithery.exe
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
         files: |
-          release_${{ env.GITHUB_REF_NAME }}-win_x64.zip
+          release_${{ github.ref_name }}-win_x64.zip
             
