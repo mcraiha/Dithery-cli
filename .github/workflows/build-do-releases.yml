@@ -1,4 +1,4 @@
-name: Build-Win-Release
+name: Build-Releases
 
 on:
   push:
@@ -20,18 +20,25 @@ jobs:
       run: echo "CURRENT_TAG=`git describe --tags --abbrev=0`" >> $GITHUB_ENV
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build a release
+    - name: Build a Win-x64 release
       run: dotnet publish -c Release -f net6.0 -r win-x64 -p:PublishSingleFile=true --self-contained true -o publish
-    - name: Rename and move binary
+    - name: Rename and move Win-x64 binary
       run: mv publish/Dithery-cli.exe dithery.exe
+    - name: Build a Linux-x64 release
+      run: dotnet publish -c Release -f net6.0 -r linux-x64 -p:PublishSingleFile=true --self-contained true -o publish
+    - name: Rename and move Linux-x64 binary
+      run: mv publish/Dithery-cli dithery
     - name: Install zip
       run: sudo apt install zip
-    - name: Package
+    - name: Package Win-x64 release
       run: zip -9 release_${{ env.CURRENT_TAG }}-win_x64.zip dithery.exe
+    - name: Package Linux-x64 release
+      run: zip -9 release_${{ env.CURRENT_TAG }}-linux_x64.zip dithery
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
         files: |
           release_${{ env.CURRENT_TAG }}-win_x64.zip
+          release_${{ env.CURRENT_TAG }}-linux_x64.zip
             
