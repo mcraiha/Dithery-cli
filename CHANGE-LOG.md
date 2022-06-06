@@ -1,3 +1,6 @@
+## Version 1.0.5 (released 2021-11-11)
+- Add C64 color reduction palette 
+
 ## Version 1.0.4 (released 2021-11-11)
 - Nuget release also for .NET 6
 

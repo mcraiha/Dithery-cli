@@ -46,6 +46,31 @@ namespace Dithery_cli
 			output = FindNearestColor(input, fullCGAColors);
 		}
 
+		private static readonly List<byte[]> c64Colors = new List<byte[]>() 
+		{
+			new byte[] { 0x00, 0x00, 0x00 }, // black
+			new byte[] { 0xFF, 0xFF, 0xFF }, // white
+			new byte[] { 0x88, 0x00, 0x00 }, // red
+			new byte[] { 0xAA, 0xFF, 0xEE }, // cyan
+			new byte[] { 0xCC, 0x44, 0xCC }, // violet / purple
+			new byte[] { 0x00, 0xCC, 0x55 }, // green
+			new byte[] { 0x00, 0x00, 0xAA }, // blue
+			new byte[] { 0xEE, 0xEE, 0x77 }, // yellow
+			new byte[] { 0xDD, 0x88, 0x55 }, // orange
+			new byte[] { 0x66, 0x44, 0x00 }, // brown
+			new byte[] { 0xFF, 0x77, 0x77 }, // light red
+			new byte[] { 0x33, 0x33, 0x33 }, // dark grey
+			new byte[] { 0x77, 0x77, 0x77 }, // grey
+			new byte[] { 0xAA, 0xFF, 0x66 }, // light green
+			new byte[] { 0x00, 0x88, 0xFF }, // light blue
+			new byte[] { 0xBB, 0xBB, 0xBB }, // light grey     
+		};
+
+		public static void TrueColorBytesToC64Bytes(in byte[] input, ref byte[] output)
+		{
+			output = FindNearestColor(input, c64Colors);
+		}
+
 		private static byte[] FindNearestColor(byte[] actualColor, List<byte[]> allowedColors)
 		{
 			int index = 0;
