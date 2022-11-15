@@ -15,17 +15,17 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Get current tag
       run: echo "CURRENT_TAG=`git describe --tags --abbrev=0`" >> $GITHUB_ENV
     - name: Restore dependencies
       run: dotnet restore
     - name: Build a Win-x64 release
-      run: dotnet publish -c Release -f net6.0 -r win-x64 -p:PublishSingleFile=true --self-contained true -o publish
+      run: dotnet publish -c Release -f net7.0 -r win-x64 -p:PublishSingleFile=true --self-contained true -o publish
     - name: Rename and move Win-x64 binary
       run: mv publish/Dithery-cli.exe dithery.exe
     - name: Build a Linux-x64 release
-      run: dotnet publish -c Release -f net6.0 -r linux-x64 -p:PublishSingleFile=true --self-contained true -o publish
+      run: dotnet publish -c Release -f net7.0 -r linux-x64 -p:PublishSingleFile=true --self-contained true -o publish
     - name: Rename and move Linux-x64 binary
       run: mv publish/Dithery-cli dithery
     - name: Install zip
