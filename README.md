@@ -1,5 +1,5 @@
 # Dithery-cli
- Command-line [image dithering](https://en.wikipedia.org/wiki/Dither#Digital_photography_and_image_processing) tool written in C#. Dithering part is done with [CSharp-Dithering](https://github.com/mcraiha/CSharp-Dithering)
+Command-line [image dithering](https://en.wikipedia.org/wiki/Dither#Digital_photography_and_image_processing) tool written in C#. Dithering part is done with [CSharp-Dithering](https://github.com/mcraiha/CSharp-Dithering)
 
 ## Build status
 ![](https://github.com/mcraiha/Dithery-cli/workflows/.NET%20Core/badge.svg)
@@ -30,7 +30,7 @@ Easiest option is to use dotnet global install
 `dotnet tool install -g Dithery-cli`  
 and after that you can run Dithery-cli from any location with `dithery`
 
-You can also download Windows release (an .exe file) from [Releases](https://github.com/mcraiha/Dithery-cli/releases) page
+You can also download Windows release (an .exe file) and Linux release from [Releases](https://github.com/mcraiha/Dithery-cli/releases) page
 
 ## How to build
 `dotnet build`
