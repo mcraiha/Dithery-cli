@@ -1,3 +1,6 @@
+## Version 1.0.6 (released 2022-11-15)
+- Use .NET 7.0 for release builds
+
 ## Version 1.0.5 (released 2022-06-06)
 - Add C64 color reduction palette  
 - Linux binary
