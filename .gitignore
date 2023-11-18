@@ -352,6 +352,7 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# Sample images
+# Sample images or output
 half.png
 dither.png
+dither.html
