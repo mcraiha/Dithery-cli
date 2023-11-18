@@ -1,11 +1,11 @@
 using System.IO;
-using System.Drawing;
+using SkiaSharp;
 
 namespace Dithery_cli
 {
 	public static class StreamWriting
 	{
-		public static void DitherAndWritePngStream(Stream outputStream, Bitmap bitmap, DitheringBase<byte> ditherer, bool writeToSameBitmap = true)
+		public static void DitherAndWritePngStream(Stream outputStream, SKBitmap bitmap, DitheringBase<byte> ditherer, bool writeToSameBitmap = true)
 		{
 			byte[] bytes = ReadWriteBitmaps.ReadBitmapToColorBytes(bitmap);
 
@@ -15,13 +15,13 @@ namespace Dithery_cli
 			if (writeToSameBitmap)
 			{
 				ReadWriteBitmaps.WriteToBitmap(bitmap, temp.GetPixelChannels);
-				bitmap.Save(outputStream, System.Drawing.Imaging.ImageFormat.Png);
+				bitmap.Encode(outputStream, SKEncodedImageFormat.Png, quality: 100);
 			}
 			else
 			{
-				Bitmap tempBitmap = new Bitmap(bitmap.Width, bitmap.Height, bitmap.PixelFormat);
+				SKBitmap tempBitmap = new SKBitmap(bitmap.Width, bitmap.Height, bitmap.ColorType, bitmap.AlphaType);
 				ReadWriteBitmaps.WriteToBitmap(tempBitmap, temp.GetPixelChannels);
-				tempBitmap.Save(outputStream, System.Drawing.Imaging.ImageFormat.Png);
+				tempBitmap.Encode(outputStream, SKEncodedImageFormat.Png, quality: 100);
 			}
 		}
 	}

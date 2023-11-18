@@ -1,7 +1,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Drawing;
+using SkiaSharp;
+
 using System.Linq;
 
 namespace Dithery_cli
@@ -163,7 +164,7 @@ namespace Dithery_cli
 				valuesAsList.Remove(DitheringMethod.None);
 
 				using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
-				using(var image = new Bitmap(bitmapStream))
+				using(var image = SKBitmap.Decode(bitmapStream))
 				{
 					if (outputFormat == OutputFormat.SingleImage)
 					{
@@ -184,7 +185,7 @@ namespace Dithery_cli
 						List<(MemoryStream pngData, string text)> images = new List<(MemoryStream pngData, string text)>();
 
 						MemoryStream originalImageMemoryStream = new MemoryStream();
-						image.Save(originalImageMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
+						image.Encode(originalImageMemoryStream, SKEncodedImageFormat.Png, quality: 100);
 						images.Add((originalImageMemoryStream, "Original"));
 						
 						foreach (DitheringMethod ditheringMethod in valuesAsList)
@@ -203,7 +204,7 @@ namespace Dithery_cli
 			{
 				DitheringBase<byte> ditherer = GetDitherer(dithering, colorReductionMethod);
 				using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
-				using(var image = new Bitmap(bitmapStream))
+				using(var image = SKBitmap.Decode(bitmapStream))
 				{
 					if (outputFormat == OutputFormat.SingleImage)
 					{
@@ -212,7 +213,7 @@ namespace Dithery_cli
 					else if (outputFormat == OutputFormat.HTMLBasic)
 					{
 						MemoryStream originalImageMemoryStream = new MemoryStream();
-						image.Save(originalImageMemoryStream, System.Drawing.Imaging.ImageFormat.Png);
+						image.Encode(originalImageMemoryStream, SKEncodedImageFormat.Png, quality: 100);
 
 						MemoryStream ditheredImageMemoryStream = new MemoryStream();
 						StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer);
