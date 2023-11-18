@@ -1,3 +1,8 @@
+## Version 1.0.7 (released 2023-11-18)
+- Use .NET 8.0 for release builds
+- Drop netcoreapp3.1 and net5.0 targets (they aren't supported anymore)
+- Replace System.Drawing with SkiaSharp
+
 ## Version 1.0.6 (released 2022-11-15)
 - Use .NET 7.0 for release builds
 

@@ -46,13 +46,10 @@ You can also download Windows release (an .exe file) and Linux release from [Rel
 
 ## Linux issues
 
-You have to have **libgdiplus** in your system. Otherwise you will get following error
-> Unhandled exception. System.TypeInitializationException: The type initializer for 'Gdip' threw an exception.
- ---> System.DllNotFoundException: Unable to load shared library 'libgdiplus' or one of its dependencies. In order to help diagnose loading problems, consider setting the LD_DEBUG environment variable: liblibgdiplus: cannot open shared object file: No such file or directory
 
 ## Input files
 
-In theory System.Drawing.Bitmap should support BMP, GIF, EXIF, JPG, PNG and TIFF file formats. I have only tested it with PNG and JPG files.  
+In theory SkiaSharp [should support](https://learn.microsoft.com/en-us/dotnet/api/skiasharp.skencodedimageformat?view=skiasharp-2.88) e.g. BMP, GIF, JPG, PNG and Webp file formats. I have only tested it with PNG and JPG files.  
 
 ## Output files
 
@@ -61,3 +58,4 @@ Output can be either PNG file(s) or HTML file with embedded PNG images.
 ## License
 
 Text in this document and source code files are released into the public domain. See [LICENSE](https://github.com/mcraiha/Dithery-cli/blob/master/LICENSE) file.  
+License for [SkiaSharp](https://github.com/mono/SkiaSharp) is [MIT](https://github.com/mono/SkiaSharp/blob/main/LICENSE.md).
