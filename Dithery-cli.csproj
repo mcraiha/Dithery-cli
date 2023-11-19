@@ -13,6 +13,7 @@
     <Description>Dithery-cli is command-line image dithering tool</Description>
     <PackageProjectUrl>https://github.com/mcraiha/Dithery-cli</PackageProjectUrl>
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
+    <PackageReadmeFile>nuget-readme.md</PackageReadmeFile>
 
     <VersionPrefix>1.0.7</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
@@ -21,6 +22,10 @@
   <ItemGroup>
     <PackageReference Include="SkiaSharp" Version="2.88.6" />
     <PackageReference Include="LibDithering" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="nuget-readme.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>
