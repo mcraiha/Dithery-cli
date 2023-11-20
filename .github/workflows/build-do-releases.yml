@@ -21,17 +21,17 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build a Win-x64 release
-      run: dotnet publish -c Release -f net8.0 -r win-x64 -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -o publish
+      run: dotnet publish -c Release -f net8.0 -r win-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=true --self-contained true -o publish
     - name: Rename and move Win-x64 binary
       run: mv publish/Dithery-cli.exe dithery.exe
     - name: Build a Linux-x64 release
-      run: dotnet publish -c Release -f net8.0 -r linux-x64 -p:PublishSingleFile=true --self-contained true -o publish
+      run: dotnet publish -c Release -f net8.0 -r linux-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=true --self-contained true -o publish
     - name: Rename and move Linux-x64 binary
       run: mv publish/Dithery-cli dithery
     - name: Install zip
       run: sudo apt install zip
     - name: Package Win-x64 release
-      run: zip -9 release_${{ env.CURRENT_TAG }}-win_x64.zip dithery.exe libSkiaSharp.dll
+      run: zip -9 release_${{ env.CURRENT_TAG }}-win_x64.zip dithery.exe
     - name: Package Linux-x64 release
       run: zip -9 release_${{ env.CURRENT_TAG }}-linux_x64.zip dithery
     - uses: "marvinpinto/action-automatic-releases@latest"
