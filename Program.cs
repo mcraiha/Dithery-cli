@@ -28,7 +28,8 @@ namespace Dithery_cli
 		TrueColorToWebSafe,
 		TrueColorToFullCGA,
 		TrueColorToFullEGA,
-		TrueColorToFullC64
+		TrueColorToFullC64,
+		TrueColorToFullPICO8
 	}
 
 	public enum OutputFormat
@@ -71,6 +72,7 @@ namespace Dithery_cli
 			ColorReductionMethod.TrueColorToFullCGA => ColorReductions.TrueColorBytesToCGABytes,
 			ColorReductionMethod.TrueColorToFullEGA => ColorReductions.TrueColorBytesToEGABytes,
 			ColorReductionMethod.TrueColorToFullC64 => ColorReductions.TrueColorBytesToC64Bytes,
+			ColorReductionMethod.TrueColorToFullPICO8 => ColorReductions.TrueColorBytesToPICO8Bytes,
 			_ => throw new ArgumentException(message: "invalid color reduction", paramName: method.ToString()),
 		};
 
@@ -94,12 +96,20 @@ namespace Dithery_cli
 			{ ColorReductionMethod.TrueColorToFullCGA, "True colors to full palette CGA colors (16 different colors)" },
 			{ ColorReductionMethod.TrueColorToFullEGA, "True colors to full palette EGA colors (64 different colors)" },
 			{ ColorReductionMethod.TrueColorToFullC64, "True colors to full palette C64 colors (16 different colors)" },
+			{ ColorReductionMethod.TrueColorToFullPICO8, "True colors to full palette PICO-8 colors (16 different colors)" },
+		};
+
+		private static readonly Dictionary<OutputFormat, string> outputFormatDescriptions = new Dictionary<OutputFormat, string>()
+		{
+			{ OutputFormat.SingleImage, "Output a single image file (or image files in case of All dither method)" },
+			{ OutputFormat.HTMLBasic, "Output a single HTML file" },
 		};
 
 		private static void PrintHelp()
 		{
 			var ditheringMethodAsArray = Enum.GetValues(typeof(DitheringMethod));
 			var colorReductionMethodAsArray = Enum.GetValues(typeof(ColorReductionMethod));	
+			var outputFormatsAsArray = Enum.GetValues(typeof(OutputFormat));	
 			Console.WriteLine("");
 			Console.WriteLine("Dithery-cli is a command-line image dithering tool");
 			Console.WriteLine("");
@@ -129,7 +139,14 @@ namespace Dithery_cli
 
 			Console.WriteLine("");
 			Console.WriteLine(" Format (for output):");
-			Console.WriteLine("  html for HTML file output");
+			foreach (OutputFormat format in outputFormatsAsArray)
+			{
+				if (format == OutputFormat.None)
+				{
+					continue;
+				}
+				Console.WriteLine($"  {format} - {outputFormatDescriptions[format]}");
+			}
 		}
 
 		private static void InvalidParametersComplain(string possibleError)

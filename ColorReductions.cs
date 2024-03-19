@@ -63,12 +63,37 @@ namespace Dithery_cli
 			new byte[] { 0x77, 0x77, 0x77 }, // grey
 			new byte[] { 0xAA, 0xFF, 0x66 }, // light green
 			new byte[] { 0x00, 0x88, 0xFF }, // light blue
-			new byte[] { 0xBB, 0xBB, 0xBB }, // light grey     
+			new byte[] { 0xBB, 0xBB, 0xBB }, // light grey
 		};
 
 		public static void TrueColorBytesToC64Bytes(in byte[] input, ref byte[] output)
 		{
 			output = FindNearestColor(input, c64Colors);
+		}
+
+		private static readonly List<byte[]> pico8Colors = new List<byte[]>() 
+		{
+			new byte[] { 0, 0, 0 }, // black
+			new byte[] { 29, 43, 83 }, // dark-blue
+			new byte[] { 126, 37, 83 }, // dark-purple
+			new byte[] { 0, 135, 81 }, // dark-green
+			new byte[] { 171, 82, 54 }, // brown
+			new byte[] { 95, 87, 79 }, // dark-grey
+			new byte[] { 194, 195, 199 }, // light-grey
+			new byte[] { 255, 241, 232 }, // white
+			new byte[] { 255, 0, 77 }, // red
+			new byte[] { 255, 163, 0 }, // orange
+			new byte[] { 255, 236, 39 }, // yellow
+			new byte[] { 0, 228, 54 }, // green
+			new byte[] { 41, 173, 255 }, // blue
+			new byte[] { 131, 118, 156 }, // lavender
+			new byte[] { 255, 119, 168 }, // pink
+			new byte[] { 255, 204, 170 }, // light-peach
+		};
+
+		public static void TrueColorBytesToPICO8Bytes(in byte[] input, ref byte[] output)
+		{
+			output = FindNearestColor(input, pico8Colors);
 		}
 
 		private static byte[] FindNearestColor(byte[] actualColor, List<byte[]> allowedColors)
