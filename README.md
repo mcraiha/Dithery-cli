@@ -6,6 +6,10 @@ Command-line [image dithering](https://en.wikipedia.org/wiki/Dither#Digital_phot
 
 ![](https://github.com/mcraiha/Dithery-cli/workflows/.NET%20Core/badge.svg)
 
+## Print help
+
+`dotnet run -- --help`
+
 ## Sample commands
 
 Save single Atkinson dithered image, with true colors to web safe color reduction to PNG file  
