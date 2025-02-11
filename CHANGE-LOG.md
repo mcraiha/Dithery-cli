@@ -1,3 +1,7 @@
+## Version 1.1.0 (released 2025-02-11)
+- Use .NET 9.0 for release builds
+- Drop net6.0 and net7.0 targets (they aren't supported anymore)
+
 ## Version 1.0.7 (released 2023-11-18)
 - Use .NET 8.0 for release builds
 - Drop netcoreapp3.1 and net5.0 targets (they aren't supported anymore)
