@@ -53,15 +53,15 @@ namespace Dithery_cli
 		private static DitheringBase<byte> GetDitherer(DitheringMethod method, DitheringBase<byte>.ColorFunction colorfunc) => 
 		method switch
 		{
-			DitheringMethod.Atkinson => new AtkinsonDitheringRGBByte(colorfunc),
-			DitheringMethod.Burkes => new BurkesDitheringRGBByte(colorfunc),
-			DitheringMethod.Fake => new FakeDitheringRGBByte(colorfunc),
-			DitheringMethod.FloydSteinberg => new FloydSteinbergDitheringRGBByte(colorfunc),
-			DitheringMethod.JarvisJudiceNinke => new JarvisJudiceNinkeDitheringRGBByte(colorfunc),
-			DitheringMethod.Sierra => new SierraDitheringRGBByte(colorfunc),
-			DitheringMethod.SierraLite => new SierraLiteDitheringRGBByte(colorfunc),
-			DitheringMethod.SierraTwoRow => new SierraTwoRowDitheringRGBByte(colorfunc),
-			DitheringMethod.Stucki => new StuckiDitheringRGBByte(colorfunc),
+			DitheringMethod.Atkinson => new AtkinsonDitheringRGB<byte>(colorfunc),
+			DitheringMethod.Burkes => new BurkesDitheringRGB<byte>(colorfunc),
+			DitheringMethod.Fake => new FakeDitheringRGB<byte>(colorfunc),
+			DitheringMethod.FloydSteinberg => new FloydSteinbergDitheringRGB<byte>(colorfunc),
+			DitheringMethod.JarvisJudiceNinke => new JarvisJudiceNinkeDitheringRGB<byte>(colorfunc),
+			DitheringMethod.Sierra => new SierraDitheringRGB<byte>(colorfunc),
+			DitheringMethod.SierraLite => new SierraLiteDitheringRGB<byte>(colorfunc),
+			DitheringMethod.SierraTwoRow => new SierraTwoRowDitheringRGB<byte>(colorfunc),
+			DitheringMethod.Stucki => new StuckiDitheringRGB<byte>(colorfunc),
 			_ => throw new ArgumentException(message: "invalid dithering", paramName: method.ToString()),
 		};
 
