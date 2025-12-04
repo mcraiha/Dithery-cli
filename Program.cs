@@ -195,6 +195,7 @@ namespace Dithery_cli
 								return;
 							}
 							FileWriting.DitherAndWritePngFile(modifiedOutputFile, image, ditherer, writeToSameBitmap: false);
+							Console.WriteLine($"Written: {modifiedOutputFile}");
 						}
 					}
 					else if (outputFormat == OutputFormat.HTMLBasic)
@@ -214,6 +215,7 @@ namespace Dithery_cli
 						}
 
 						File.WriteAllText(outputFile, HtmlWriter.GenerateMultiImageHtml(images.ToArray()));
+						Console.WriteLine($"Written: {outputFile}");
 					}
 				}
 			}
@@ -226,6 +228,7 @@ namespace Dithery_cli
 					if (outputFormat == OutputFormat.SingleImage)
 					{
 						FileWriting.DitherAndWritePngFile(outputFile, image, ditherer);
+						Console.WriteLine($"Written: {outputFile}");
 					}
 					else if (outputFormat == OutputFormat.HTMLBasic)
 					{
@@ -236,6 +239,7 @@ namespace Dithery_cli
 						StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer);
 
 						File.WriteAllText(outputFile, HtmlWriter.GenerateSingleImageHtml((originalImageMemoryStream, "Original"), (ditheredImageMemoryStream, ditherer.GetMethodName())));
+						Console.WriteLine($"Written: {outputFile}");
 					}
 				}
 			}
