@@ -6,29 +6,37 @@ namespace Dithery_cli
 {
 	public static class HtmlWriter
 	{
-		private static readonly string singleFileTemplate = @"<!doctype html>
-<html lang=""en"">
-<head>
-  <meta charset=""utf-8"">
-  <title>Dithery output</title>
-  <meta name=""description"" content=""Generated with Dithery"">
-</head>
-<body>
-{0} <br> {1}
-</body>
-</html>";
+		private static readonly string singleFileTemplate = """
+		<!doctype html>
+		<html lang="en">
+		<head>
+		<meta charset="utf-8">
+		<title>Dithery output</title>
+		<meta name="description" content="Generated with Dithery">
+		</head>
+		<body>
+		<div style="max-width: fit-content;margin-left: auto;margin-right: auto;">
+		{0} <br> {1}
+		</div>
+		</body>
+		</html>
+		""";
 
-private static readonly string allFilesTemplate = @"<!doctype html>
-<html lang=""en"">
-<head>
-  <meta charset=""utf-8"">
-  <title>Dithery output</title>
-  <meta name=""description"" content=""Generated with Dithery"">
-</head>
-<body>
-{0}
-</body>
-</html>";
+		private static readonly string allFilesTemplate = """
+		<!doctype html>
+		<html lang="en">
+		<head>
+		<meta charset="utf-8">
+		<title>Dithery output</title>
+		<meta name="description" content="Generated with Dithery">
+		</head>
+		<body>
+		<div style="max-width: fit-content;margin-left: auto;margin-right: auto;">
+		{0}
+		</div>
+		</body>
+		</html>
+		""";
 
 		public static string GenerateSingleImageHtml((MemoryStream pngData, string text) original, (MemoryStream pngData, string text) dithered)
 		{
