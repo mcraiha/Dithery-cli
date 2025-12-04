@@ -1,3 +1,7 @@
+## Version 1.1.1 (released 2025-12-04)
+- Use .NET 10.0 for release builds
+- Drop net8.0 and net9.0 targets (they aren't supported anymore)
+
 ## Version 1.1.0 (released 2025-02-11)
 - Use .NET 9.0 for release builds
 - Drop net6.0 and net7.0 targets (they aren't supported anymore)
