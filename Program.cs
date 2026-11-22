@@ -6,244 +6,244 @@ using Dithering;
 
 using System.Linq;
 
-namespace Dithery_cli
+namespace Dithery_cli;
+
+public enum DitheringMethod
 {
-	public enum DitheringMethod
-	{
-		None,
-		All,
-		Atkinson,
-		Burkes,
-		Fake,
-		FloydSteinberg,
-		JarvisJudiceNinke,
-		Sierra,
-		SierraLite,
-		SierraTwoRow,
-		Stucki
-	}
+	None,
+	All,
+	Atkinson,
+	Burkes,
+	Fake,
+	FloydSteinberg,
+	JarvisJudiceNinke,
+	Sierra,
+	SierraLite,
+	SierraTwoRow,
+	Stucki
+}
 
-	public enum ColorReductionMethod
-	{
-		None,
-		TrueColorToWebSafe,
-		TrueColorToFullCGA,
-		TrueColorToFullEGA,
-		TrueColorToFullC64,
-		TrueColorToFullPICO8
-	}
+public enum ColorReductionMethod
+{
+	None,
+	TrueColorToWebSafe,
+	TrueColorToFullCGA,
+	TrueColorToFullEGA,
+	TrueColorToFullC64,
+	TrueColorToFullPICO8
+}
 
-	public enum OutputFormat
-	{
-		None,
-		SingleImage,
-		HTMLBasic,
-	}
+public enum OutputFormat
+{
+	None,
+	SingleImage,
+	HTMLBasic,
+}
 
-	public class VersionInfos
+public class VersionInfos
+{
+	public string GetAssemblyVersion()
 	{
-		public string GetAssemblyVersion()
+		string returnValue = GetType().Assembly.GetName().Version.ToString();
+		return returnValue.Remove(returnValue.Length - 2);
+	}
+}
+
+class Program
+{
+	private static IDitherCommon<byte> GetDitherer(DitheringMethod method, DitheringErrorPushBase<byte>.ColorFunction colorfunc) => 
+	method switch
+	{
+		DitheringMethod.Atkinson => new AtkinsonDitheringRGB<byte>(colorfunc),
+		DitheringMethod.Burkes => new BurkesDitheringRGB<byte>(colorfunc),
+		DitheringMethod.Fake => new FakeDitheringRGB<byte>(colorfunc),
+		DitheringMethod.FloydSteinberg => new FloydSteinbergDitheringRGB<byte>(colorfunc),
+		DitheringMethod.JarvisJudiceNinke => new JarvisJudiceNinkeDitheringRGB<byte>(colorfunc),
+		DitheringMethod.Sierra => new SierraDitheringRGB<byte>(colorfunc),
+		DitheringMethod.SierraLite => new SierraLiteDitheringRGB<byte>(colorfunc),
+		DitheringMethod.SierraTwoRow => new SierraTwoRowDitheringRGB<byte>(colorfunc),
+		DitheringMethod.Stucki => new StuckiDitheringRGB<byte>(colorfunc),
+		_ => throw new ArgumentException(message: "invalid dithering", paramName: method.ToString()),
+	};
+
+	private static DitheringErrorPushBase<byte>.ColorFunction GetColorReductionMethod(ColorReductionMethod method) =>
+	method switch
+	{
+		ColorReductionMethod.TrueColorToWebSafe => ColorReductions.TrueColorBytesToWebSafeColorBytes,
+		ColorReductionMethod.TrueColorToFullCGA => ColorReductions.TrueColorBytesToCGABytes,
+		ColorReductionMethod.TrueColorToFullEGA => ColorReductions.TrueColorBytesToEGABytes,
+		ColorReductionMethod.TrueColorToFullC64 => ColorReductions.TrueColorBytesToC64Bytes,
+		ColorReductionMethod.TrueColorToFullPICO8 => ColorReductions.TrueColorBytesToPICO8Bytes,
+		_ => throw new ArgumentException(message: "invalid color reduction", paramName: method.ToString()),
+	};
+
+	private static readonly Dictionary<DitheringMethod, string> ditheringDescriptions = new Dictionary<DitheringMethod, string>()
+	{
+		{ DitheringMethod.All, "Apply all dithering methods to create multiple files" },
+		{ DitheringMethod.Atkinson, "Atkinson dithering" },
+		{ DitheringMethod.Burkes, "Burkes dithering" },
+		{ DitheringMethod.Fake, "Fake means no dithering (but color reduction is still done)" },
+		{ DitheringMethod.FloydSteinberg, "Floyd-Steinberg dithering" },
+		{ DitheringMethod.JarvisJudiceNinke, "Jarvis-Judice-Ninke dithering" },
+		{ DitheringMethod.Sierra, "Sierra dithering" },
+		{ DitheringMethod.SierraLite, "Sierra lite dithering" },
+		{ DitheringMethod.SierraTwoRow, "Sierra two row dithering" },
+		{ DitheringMethod.Stucki, "Stucki dithering" },
+	};
+
+	private static readonly Dictionary<ColorReductionMethod, string> colorReductionDescriptions = new Dictionary<ColorReductionMethod, string>()
+	{
+		{ ColorReductionMethod.TrueColorToWebSafe, "True colors to Web safe colors (216 different colors)" },
+		{ ColorReductionMethod.TrueColorToFullCGA, "True colors to full palette CGA colors (16 different colors)" },
+		{ ColorReductionMethod.TrueColorToFullEGA, "True colors to full palette EGA colors (64 different colors)" },
+		{ ColorReductionMethod.TrueColorToFullC64, "True colors to full palette C64 colors (16 different colors)" },
+		{ ColorReductionMethod.TrueColorToFullPICO8, "True colors to full palette PICO-8 colors (16 different colors)" },
+	};
+
+	private static readonly Dictionary<OutputFormat, string> outputFormatDescriptions = new Dictionary<OutputFormat, string>()
+	{
+		{ OutputFormat.SingleImage, "Output a single image file (or image files in case of All dither method)" },
+		{ OutputFormat.HTMLBasic, "Output a single HTML file" },
+	};
+
+	private static void PrintHelp()
+	{
+		var ditheringMethodAsArray = Enum.GetValues(typeof(DitheringMethod));
+		var colorReductionMethodAsArray = Enum.GetValues(typeof(ColorReductionMethod));	
+		var outputFormatsAsArray = Enum.GetValues(typeof(OutputFormat));	
+		Console.WriteLine("");
+		Console.WriteLine("Dithery-cli is a command-line image dithering tool");
+		Console.WriteLine("");
+		Console.WriteLine("-- Help --");
+		Console.WriteLine(" Usage:");
+		Console.WriteLine(" dithery imagefile -m dithering_method -c color_reduction_method -f format -o outputfile");
+		Console.WriteLine("");
+		Console.WriteLine(" Dithering methods (for output):");
+		foreach (DitheringMethod method in ditheringMethodAsArray)
 		{
-			string returnValue = GetType().Assembly.GetName().Version.ToString();
-			return returnValue.Remove(returnValue.Length - 2);
+			if (method == DitheringMethod.None)
+			{
+				continue;
+			}
+			Console.WriteLine($"  {method} - {ditheringDescriptions[method]}");
+		}
+		Console.WriteLine("");
+		Console.WriteLine(" Color reduction methods (for output):");
+		foreach (ColorReductionMethod method in colorReductionMethodAsArray)
+		{
+			if (method == ColorReductionMethod.None)
+			{
+				continue;
+			}
+			Console.WriteLine($"  {method} - {colorReductionDescriptions[method]}");
+		}
+
+		Console.WriteLine("");
+		Console.WriteLine(" Format (for output):");
+		foreach (OutputFormat format in outputFormatsAsArray)
+		{
+			if (format == OutputFormat.None)
+			{
+				continue;
+			}
+			Console.WriteLine($"  {format} - {outputFormatDescriptions[format]}");
 		}
 	}
 
-	class Program
+	private static void InvalidParametersComplain(string possibleError)
 	{
-		private static IDitherCommon<byte> GetDitherer(DitheringMethod method, DitheringErrorPushBase<byte>.ColorFunction colorfunc) => 
-		method switch
-		{
-			DitheringMethod.Atkinson => new AtkinsonDitheringRGB<byte>(colorfunc),
-			DitheringMethod.Burkes => new BurkesDitheringRGB<byte>(colorfunc),
-			DitheringMethod.Fake => new FakeDitheringRGB<byte>(colorfunc),
-			DitheringMethod.FloydSteinberg => new FloydSteinbergDitheringRGB<byte>(colorfunc),
-			DitheringMethod.JarvisJudiceNinke => new JarvisJudiceNinkeDitheringRGB<byte>(colorfunc),
-			DitheringMethod.Sierra => new SierraDitheringRGB<byte>(colorfunc),
-			DitheringMethod.SierraLite => new SierraLiteDitheringRGB<byte>(colorfunc),
-			DitheringMethod.SierraTwoRow => new SierraTwoRowDitheringRGB<byte>(colorfunc),
-			DitheringMethod.Stucki => new StuckiDitheringRGB<byte>(colorfunc),
-			_ => throw new ArgumentException(message: "invalid dithering", paramName: method.ToString()),
-		};
+		Console.WriteLine($"Cannot parse parameters! Error: {possibleError}");
+		Console.WriteLine("Please use --help");
+	}
 
-		private static DitheringErrorPushBase<byte>.ColorFunction GetColorReductionMethod(ColorReductionMethod method) =>
-		method switch
+	static void Main(string[] args)
+	{
+		Console.WriteLine($"dithery-cli v{new VersionInfos().GetAssemblyVersion()}");
+		if (args.Length == 0 || args[0] == "--help" || args[0] == "-h")
 		{
-			ColorReductionMethod.TrueColorToWebSafe => ColorReductions.TrueColorBytesToWebSafeColorBytes,
-			ColorReductionMethod.TrueColorToFullCGA => ColorReductions.TrueColorBytesToCGABytes,
-			ColorReductionMethod.TrueColorToFullEGA => ColorReductions.TrueColorBytesToEGABytes,
-			ColorReductionMethod.TrueColorToFullC64 => ColorReductions.TrueColorBytesToC64Bytes,
-			ColorReductionMethod.TrueColorToFullPICO8 => ColorReductions.TrueColorBytesToPICO8Bytes,
-			_ => throw new ArgumentException(message: "invalid color reduction", paramName: method.ToString()),
-		};
-
-		private static readonly Dictionary<DitheringMethod, string> ditheringDescriptions = new Dictionary<DitheringMethod, string>()
-		{
-			{ DitheringMethod.All, "Apply all dithering methods to create multiple files" },
-			{ DitheringMethod.Atkinson, "Atkinson dithering" },
-			{ DitheringMethod.Burkes, "Burkes dithering" },
-			{ DitheringMethod.Fake, "Fake means no dithering (but color reduction is still done)" },
-			{ DitheringMethod.FloydSteinberg, "Floyd-Steinberg dithering" },
-			{ DitheringMethod.JarvisJudiceNinke, "Jarvis-Judice-Ninke dithering" },
-			{ DitheringMethod.Sierra, "Sierra dithering" },
-			{ DitheringMethod.SierraLite, "Sierra lite dithering" },
-			{ DitheringMethod.SierraTwoRow, "Sierra two row dithering" },
-			{ DitheringMethod.Stucki, "Stucki dithering" },
-		};
-
-		private static readonly Dictionary<ColorReductionMethod, string> colorReductionDescriptions = new Dictionary<ColorReductionMethod, string>()
-		{
-			{ ColorReductionMethod.TrueColorToWebSafe, "True colors to Web safe colors (216 different colors)" },
-			{ ColorReductionMethod.TrueColorToFullCGA, "True colors to full palette CGA colors (16 different colors)" },
-			{ ColorReductionMethod.TrueColorToFullEGA, "True colors to full palette EGA colors (64 different colors)" },
-			{ ColorReductionMethod.TrueColorToFullC64, "True colors to full palette C64 colors (16 different colors)" },
-			{ ColorReductionMethod.TrueColorToFullPICO8, "True colors to full palette PICO-8 colors (16 different colors)" },
-		};
-
-		private static readonly Dictionary<OutputFormat, string> outputFormatDescriptions = new Dictionary<OutputFormat, string>()
-		{
-			{ OutputFormat.SingleImage, "Output a single image file (or image files in case of All dither method)" },
-			{ OutputFormat.HTMLBasic, "Output a single HTML file" },
-		};
-
-		private static void PrintHelp()
-		{
-			var ditheringMethodAsArray = Enum.GetValues(typeof(DitheringMethod));
-			var colorReductionMethodAsArray = Enum.GetValues(typeof(ColorReductionMethod));	
-			var outputFormatsAsArray = Enum.GetValues(typeof(OutputFormat));	
-			Console.WriteLine("");
-			Console.WriteLine("Dithery-cli is a command-line image dithering tool");
-			Console.WriteLine("");
-			Console.WriteLine("-- Help --");
-			Console.WriteLine(" Usage:");
-			Console.WriteLine(" dithery imagefile -m dithering_method -c color_reduction_method -f format -o outputfile");
-			Console.WriteLine("");
-			Console.WriteLine(" Dithering methods (for output):");
-			foreach (DitheringMethod method in ditheringMethodAsArray)
-			{
-				if (method == DitheringMethod.None)
-				{
-					continue;
-				}
-				Console.WriteLine($"  {method} - {ditheringDescriptions[method]}");
-			}
-			Console.WriteLine("");
-			Console.WriteLine(" Color reduction methods (for output):");
-			foreach (ColorReductionMethod method in colorReductionMethodAsArray)
-			{
-				if (method == ColorReductionMethod.None)
-				{
-					continue;
-				}
-				Console.WriteLine($"  {method} - {colorReductionDescriptions[method]}");
-			}
-
-			Console.WriteLine("");
-			Console.WriteLine(" Format (for output):");
-			foreach (OutputFormat format in outputFormatsAsArray)
-			{
-				if (format == OutputFormat.None)
-				{
-					continue;
-				}
-				Console.WriteLine($"  {format} - {outputFormatDescriptions[format]}");
-			}
+			PrintHelp();
+			return;
 		}
 
-		private static void InvalidParametersComplain(string possibleError)
+		(bool valid, string possibleError, DitheringMethod dithering, ColorReductionMethod colorReduction, OutputFormat outputFormat, string inputFile, string outputFile) = CmdParsing.ParseParameters(args);
+
+		if (!valid)
 		{
-			Console.WriteLine($"Cannot parse parameters! Error: {possibleError}");
-			Console.WriteLine("Please use --help");
+			InvalidParametersComplain(possibleError);
+			return;
 		}
 
-		static void Main(string[] args)
+		var colorReductionMethod = GetColorReductionMethod(colorReduction);
+
+		if (dithering == DitheringMethod.All)
 		{
-			Console.WriteLine($"dithery-cli v{new VersionInfos().GetAssemblyVersion()}");
-			if (args.Length == 0 || args[0] == "--help" || args[0] == "-h")
+			var valuesAsList = new List<DitheringMethod>(Enum.GetValues(typeof(DitheringMethod)).Cast<DitheringMethod>());
+			valuesAsList.Remove(DitheringMethod.All);
+			valuesAsList.Remove(DitheringMethod.None);
+
+			using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
+			using(var image = SKBitmap.Decode(bitmapStream))
 			{
-				PrintHelp();
-				return;
-			}
-
-			(bool valid, string possibleError, DitheringMethod dithering, ColorReductionMethod colorReduction, OutputFormat outputFormat, string inputFile, string outputFile) = CmdParsing.ParseParameters(args);
-
-			if (!valid)
-			{
-				InvalidParametersComplain(possibleError);
-				return;
-			}
-
-			var colorReductionMethod = GetColorReductionMethod(colorReduction);
-
-			if (dithering == DitheringMethod.All)
-			{
-				var valuesAsList = new List<DitheringMethod>(Enum.GetValues(typeof(DitheringMethod)).Cast<DitheringMethod>());
-				valuesAsList.Remove(DitheringMethod.All);
-				valuesAsList.Remove(DitheringMethod.None);
-
-				using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
-				using(var image = SKBitmap.Decode(bitmapStream))
+				if (outputFormat == OutputFormat.SingleImage)
 				{
-					if (outputFormat == OutputFormat.SingleImage)
+					foreach (DitheringMethod ditheringMethod in valuesAsList)
 					{
-						foreach (DitheringMethod ditheringMethod in valuesAsList)
+						IDitherCommon<byte> ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
+						string modifiedOutputFile = outputFile.Replace(".png", $"{ditherer.GetFilenameAddition()}.png");
+						if (File.Exists(modifiedOutputFile))
 						{
-							IDitherCommon<byte> ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
-							string modifiedOutputFile = outputFile.Replace(".png", $"{ditherer.GetFilenameAddition()}.png");
-							if (File.Exists(modifiedOutputFile))
-							{
-								Console.WriteLine($"Cannot overwrite existing file {modifiedOutputFile}");
-								return;
-							}
-							FileWriting.DitherAndWritePngFile(modifiedOutputFile, image, ditherer, writeToSameBitmap: false);
-							Console.WriteLine($"Written: {modifiedOutputFile}");
+							Console.WriteLine($"Cannot overwrite existing file {modifiedOutputFile}");
+							return;
 						}
-					}
-					else if (outputFormat == OutputFormat.HTMLBasic)
-					{
-						List<(MemoryStream pngData, string text)> images = new List<(MemoryStream pngData, string text)>();
-
-						MemoryStream originalImageMemoryStream = new MemoryStream();
-						image.Encode(originalImageMemoryStream, SKEncodedImageFormat.Png, quality: 100);
-						images.Add((originalImageMemoryStream, "Original"));
-						
-						foreach (DitheringMethod ditheringMethod in valuesAsList)
-						{
-							IDitherCommon<byte> ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
-							MemoryStream ditheredImageMemoryStream = new MemoryStream();
-							StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer, writeToSameBitmap: false);
-							images.Add((ditheredImageMemoryStream, ditherer.GetMethodName()));
-						}
-
-						File.WriteAllText(outputFile, HtmlWriter.GenerateMultiImageHtml(images.ToArray()));
-						Console.WriteLine($"Written: {outputFile}");
+						FileWriting.DitherAndWritePngFile(modifiedOutputFile, image, ditherer, writeToSameBitmap: false);
+						Console.WriteLine($"Written: {modifiedOutputFile}");
 					}
 				}
-			}
-			else
-			{
-				IDitherCommon<byte> ditherer = GetDitherer(dithering, colorReductionMethod);
-				using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
-				using(var image = SKBitmap.Decode(bitmapStream))
+				else if (outputFormat == OutputFormat.HTMLBasic)
 				{
-					if (outputFormat == OutputFormat.SingleImage)
-					{
-						FileWriting.DitherAndWritePngFile(outputFile, image, ditherer);
-						Console.WriteLine($"Written: {outputFile}");
-					}
-					else if (outputFormat == OutputFormat.HTMLBasic)
-					{
-						MemoryStream originalImageMemoryStream = new MemoryStream();
-						image.Encode(originalImageMemoryStream, SKEncodedImageFormat.Png, quality: 100);
+					List<(MemoryStream pngData, string text)> images = new List<(MemoryStream pngData, string text)>();
 
+					MemoryStream originalImageMemoryStream = new MemoryStream();
+					image.Encode(originalImageMemoryStream, SKEncodedImageFormat.Png, quality: 100);
+					images.Add((originalImageMemoryStream, "Original"));
+					
+					foreach (DitheringMethod ditheringMethod in valuesAsList)
+					{
+						IDitherCommon<byte> ditherer = GetDitherer(ditheringMethod, colorReductionMethod);
 						MemoryStream ditheredImageMemoryStream = new MemoryStream();
-						StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer);
-
-						File.WriteAllText(outputFile, HtmlWriter.GenerateSingleImageHtml((originalImageMemoryStream, "Original"), (ditheredImageMemoryStream, ditherer.GetMethodName())));
-						Console.WriteLine($"Written: {outputFile}");
+						StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer, writeToSameBitmap: false);
+						images.Add((ditheredImageMemoryStream, ditherer.GetMethodName()));
 					}
+
+					File.WriteAllText(outputFile, HtmlWriter.GenerateMultiImageHtml(images.ToArray()));
+					Console.WriteLine($"Written: {outputFile}");
+				}
+			}
+		}
+		else
+		{
+			IDitherCommon<byte> ditherer = GetDitherer(dithering, colorReductionMethod);
+			using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
+			using(var image = SKBitmap.Decode(bitmapStream))
+			{
+				if (outputFormat == OutputFormat.SingleImage)
+				{
+					FileWriting.DitherAndWritePngFile(outputFile, image, ditherer);
+					Console.WriteLine($"Written: {outputFile}");
+				}
+				else if (outputFormat == OutputFormat.HTMLBasic)
+				{
+					MemoryStream originalImageMemoryStream = new MemoryStream();
+					image.Encode(originalImageMemoryStream, SKEncodedImageFormat.Png, quality: 100);
+
+					MemoryStream ditheredImageMemoryStream = new MemoryStream();
+					StreamWriting.DitherAndWritePngStream(ditheredImageMemoryStream, image, ditherer);
+
+					File.WriteAllText(outputFile, HtmlWriter.GenerateSingleImageHtml((originalImageMemoryStream, "Original"), (ditheredImageMemoryStream, ditherer.GetMethodName())));
+					Console.WriteLine($"Written: {outputFile}");
 				}
 			}
 		}
 	}
 }
+
