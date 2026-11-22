@@ -2,6 +2,7 @@
 - Use .NET 11.0 for release builds
 - Drop net10.0 target (it is not supported anymore)
 - Update to LibDithering 1.2.0
+- Update to SkiaSharp 4.157.0
 
 ## Version 1.1.1 (released 2025-12-04)
 - Use .NET 10.0 for release builds
