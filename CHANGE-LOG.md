@@ -1,3 +1,8 @@
+## Version 1.2.0 (released 2026-11-22)
+- Use .NET 11.0 for release builds
+- Drop net10.0 target (it is not supported anymore)
+- Update to LibDithering 1.2.0
+
 ## Version 1.1.1 (released 2025-12-04)
 - Use .NET 10.0 for release builds
 - Drop net8.0 and net9.0 targets (they aren't supported anymore)

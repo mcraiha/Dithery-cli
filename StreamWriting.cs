@@ -1,5 +1,6 @@
 using System.IO;
 using SkiaSharp;
+using Dithering;
 
 namespace Dithery_cli
 {

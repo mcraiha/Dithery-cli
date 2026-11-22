@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <RootNamespace>Dithery_cli</RootNamespace>
 
     <PackAsTool>true</PackAsTool>
@@ -15,15 +15,15 @@
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
     <PackageReadmeFile>nuget-readme.md</PackageReadmeFile>
 
-    <VersionPrefix>1.1.1</VersionPrefix>
+    <VersionPrefix>1.2.0</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="3.119.1" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="3.119.1" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.1" />
-    <PackageReference Include="LibDithering" Version="1.1.1" />
+    <PackageReference Include="SkiaSharp" Version="4.157.0" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="4.157.0" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.157.0" />
+    <PackageReference Include="LibDithering" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
