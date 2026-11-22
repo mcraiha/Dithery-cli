@@ -49,7 +49,7 @@ public class VersionInfos
 	}
 }
 
-class Program
+public class Program
 {
 	private static IDitherCommon<byte> GetDitherer(DitheringMethod method, DitheringErrorPushBase<byte>.ColorFunction colorfunc) => 
 	method switch
@@ -156,7 +156,7 @@ class Program
 		Console.WriteLine("Please use --help");
 	}
 
-	static void Main(string[] args)
+	public static void Main(string[] args)
 	{
 		Console.WriteLine($"dithery-cli v{new VersionInfos().GetAssemblyVersion()}");
 		if (args.Length == 0 || args[0] == "--help" || args[0] == "-h")
@@ -222,6 +222,7 @@ class Program
 		}
 		else
 		{
+			// Single image
 			IDitherCommon<byte> ditherer = GetDitherer(dithering, colorReductionMethod);
 			using(FileStream bitmapStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
 			using(var image = SKBitmap.Decode(bitmapStream))
